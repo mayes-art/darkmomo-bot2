@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Constants\Constellation;
 use App\Services\LineBotService;
+use App\Services\ChatGPTService;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -21,21 +23,32 @@ class LobbyController extends Controller
     protected $bot;
     protected $messageBuilder;
     protected $lineBotService;
+    protected $chatGPTService;
 
-    public function __construct(LineBotService $lineBotService)
+    public function __construct(LineBotService $lineBotService, ChatGPTService $chatGPTService)
     {
         $httpClient = new CurlHTTPClient(env('LINE_BOT_CHANNEL_ACCESS_TOKEN'));
         $this->bot = new LINEBot($httpClient, ['channelSecret' => env('LINE_BOT_CHANNEL_SECRET')]);
         $this->messageBuilder = new MultiMessageBuilder();
         $this->lineBotService = $lineBotService;
+        $this->chatGPTService = $chatGPTService;
     }
 
     public function lineGet()
     {
         try {
-            $event = request()->all();
-            Log::info(json_encode($event, JSON_UNESCAPED_UNICODE));
+//            $event = request()->all();
+//            Log::info(json_encode($event, JSON_UNESCAPED_UNICODE));
             return response('test');
+
+//            $say = 'ai 你會說中文嗎';
+//
+//            if (Str::contains($say, ['ai', 'AI', 'Ai', 'aI'])) {
+//                $stringFormat = explode(' ', $say);
+//                $message = $this->chatGPTService->answer($stringFormat[1]);
+//                return response($message);
+//            }
+
         } catch (\Exception $e) {
             report($e);
         }
@@ -122,6 +135,12 @@ class LobbyController extends Controller
 //            if ('text' == $this->lineBotService->getReqType() && $this->lineBotService->randomChange() <= 34) {
 //                $this->lineBotService->setText('嘔咾上帝, 阿們');
 //            }
+
+            if (Str::contains($say, ['ai', 'AI', 'Ai', 'aI'])) {
+                $stringFormat = explode(' ', $say);
+                $message = $this->chatGPTService->answer($stringFormat[1]);
+                $this->lineBotService->setText($message);
+            }
 
             $this->lineBotService->reply();
         } catch (\Exception $e) {
