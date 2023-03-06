@@ -34,6 +34,6 @@ class ChatGPTService
 
         $json = $response->json();
 
-        return $json['choices'][0]['message']['content'];
+        return trim($json['choices'][0]['message']['content']);
     }
 }
