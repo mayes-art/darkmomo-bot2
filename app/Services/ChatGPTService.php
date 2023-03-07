@@ -36,4 +36,25 @@ class ChatGPTService
 
         return trim($json['choices'][0]['message']['content']);
     }
+
+    public function textDavinci(string $context)
+    {
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . env('OPEN_AI_API_KEY'),
+            'Content-Type' => 'application/json'
+        ])->post('https://api.openai.com/v1/completions', [
+            "model"             => 'text-davinci-003',
+            "prompt"            => "\n\nHuman: {$context} \nAI:",
+            "temperature"       => 0.9,
+            "max_tokens"        => 150,
+            "top_p"             => 1,
+            "frequency_penalty" => 0.0,
+            "presence_penalty"  => 0.6,
+            "stop"              => [" Human:", " AI:"],
+        ]);
+
+        $json = $response->json();
+
+        return trim($json['choices'][0]['text']);
+    }
 }

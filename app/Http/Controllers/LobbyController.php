@@ -39,13 +39,13 @@ class LobbyController extends Controller
         try {
 //            $event = request()->all();
 //            Log::info(json_encode($event, JSON_UNESCAPED_UNICODE));
-            return response('test');
+            return response('darkmomo-bot service');
 
 //            $say = 'ai 你會說中文嗎';
 //
 //            if (Str::contains($say, ['ai', 'AI', 'Ai', 'aI'])) {
 //                $stringFormat = explode(' ', $say);
-//                $message = $this->chatGPTService->answer($stringFormat[1]);
+//                $message = $this->chatGPTService->textDavinci($stringFormat[1]);
 //                return response($message);
 //            }
 
@@ -138,7 +138,7 @@ class LobbyController extends Controller
 
             if (Str::contains($say, ['ai', 'AI', 'Ai', 'aI'])) {
                 $stringFormat = explode(' ', $say);
-                $message = $this->chatGPTService->answer($stringFormat[1]);
+                $message = $this->chatGPTService->textDavinci($stringFormat[1]);
                 $this->lineBotService->setText($message);
             }
 
