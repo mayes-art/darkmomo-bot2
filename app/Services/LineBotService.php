@@ -41,12 +41,12 @@ class LineBotService
         $this->userId = $p['source']['userId'];
         $this->say = $p['message']['text'] ?? '';
 
-        if (!Member::where('line.userId', $this->userId)->first()) {
-            Member::create(['line' => [
-                'userId'     => $this->userId,
-                'replyToken' => $this->replyToken,
-            ]]);
-        }
+//        if (!Member::where('line.userId', $this->userId)->first()) {
+//            Member::create(['line' => [
+//                'userId'     => $this->userId,
+//                'replyToken' => $this->replyToken,
+//            ]]);
+//        }
     }
 
     public function randomChange(): int
