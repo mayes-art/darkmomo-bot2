@@ -125,8 +125,6 @@ class LobbyController extends Controller
 //                }
 //            }
 
-
-
             if (Str::contains($say, ['roll', 'Roll', 'ROLL'])) {
                 $message = '(1~100)隨機骰出來的數字為: ' . $this->lineBotService->randomChange();
                 $this->lineBotService->setText($message);
@@ -138,8 +136,18 @@ class LobbyController extends Controller
 
             if (Str::contains($say, ['ai', 'AI', 'Ai', 'aI'])) {
                 $stringFormat = explode(' ', $say);
-                $message = $this->chatGPTService->textDavinci($stringFormat[1]);
-                $this->lineBotService->setText($message);
+                $reqText = $stringFormat[1];
+
+                if (empty($reqText)) {
+                    return response()->json(['status' => 0, 'msg' => 'No data']);
+                }
+
+                $this->chatGPTService->setDavinciSay($reqText);
+
+                do {
+                    $result = $this->chatGPTService->textDavinci();
+                    $this->lineBotService->setText($result['context']);
+                } while ($result['status'] == 'length');
             }
 
             $this->lineBotService->reply();
