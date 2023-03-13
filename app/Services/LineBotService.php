@@ -5,7 +5,6 @@
  */
 namespace App\Services;
 
-
 use App\Models\Member;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -42,7 +41,12 @@ class LineBotService
         $this->userId = $p['source']['userId'];
         $this->say = $p['message']['text'] ?? '';
 
-        $member = Member::updateOrCreate(['line.userId' => $this->userId, 'line.replyToken' => $this->replyToken]);
+        if (!Member::where('line.userId', $this->userId)->first()) {
+            Member::create(['line' => [
+                'userId'     => $this->userId,
+                'replyToken' => $this->replyToken,
+            ]]);
+        }
     }
 
     public function randomChange(): int

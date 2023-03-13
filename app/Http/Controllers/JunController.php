@@ -20,8 +20,8 @@ class JunController extends Controller
 //
 //        }
 
-        return response()->json([
-            'data' => Test::updateOrCreate(['itemNo' => 'C003'], ['price' => 10000])
-        ]);
+        $data = Test::where('line.itemNo', 'A001')->first();
+
+        return response()->json($data);
     }
 }
