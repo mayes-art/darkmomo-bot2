@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::get('test-add', [\App\Http\Controllers\JunController::class, 'testAdd']);
+Route::get('test', [\App\Http\Controllers\JunController::class, 'testGet']);

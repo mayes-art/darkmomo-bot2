@@ -6,6 +6,7 @@
 namespace App\Services;
 
 
+use App\Models\Member;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use LINE\LINEBot;
@@ -40,6 +41,8 @@ class LineBotService
         $this->type = $p['message']['type'];
         $this->userId = $p['source']['userId'];
         $this->say = $p['message']['text'] ?? '';
+
+        $member = Member::updateOrCreate(['line.userId' => $this->userId, 'line.replyToken' => $this->replyToken]);
     }
 
     public function randomChange(): int
